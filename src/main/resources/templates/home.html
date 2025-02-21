@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+    <th:block th:replace="index::head"></th:block>
+  </head>
+  <body>
+    <th:block th:replace="index::nav"></th:block>
+
+    <div th:if="${param.notAuthorized}">
+      <div class="alert alert-danger text-center">Non autorizzato</div>
+    </div>
+    <div th:if="${successMessage}" class="alert alert-success">
+      <p class="text-center" th:text="${successMessage}"></p>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger">
+      <p class="text-center" th:text="${errorMessage}"></p>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row ms-5 vh-100 align-items-center">
+        <div class="col-10">
+          <h1 class="mb-5">
+            Welcome to
+            <span class="display-4 fw-bold d-block"> New Aulab Chronicles</span>
+          </h1>
+        </div>
+      </div>
+    </div>
+
+    <div class="container" th:if="${articles.size() > 0}">
+      <div class="row justify-content-center">
+        <div class="col-10 mb-5">
+          <h2 class="text-center">Ultimi articoli</h2>
+        </div>
+      </div>
+      <div class="row justify-content-center mb-5">
+        <div
+          th:each="article:${articles}"
+          class="col-12 col-md-4 d-flex justify-content-center"
+        >
+          <div style="width: 18rem" class="card mb-3">
+            <img
+              th:if="${article.image != null}"
+              th:src="@{${article.image.path}}"
+              alt="Immagine articolo"
+              class="card-img-top"
+            />
+            <img
+              th:unless="${article.image != null}"
+              th:src="@{/images/default.jpg}"
+              alt="Immagine default"
+              class="card-img-top"
+            />
+
+            <div class="card-body">
+              <h5 class="card-title" th:text="${article.title}">Titolo</h5>
+              <p class="card-text" th:text="${article.subtitle}"></p>
+              <p class="card-text" th:text="${article.user.username}"></p>
+
+              <a th:href="@{/articles/detail/{id}(id=${article.id})}"
+                >Approfondisci</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <th:block th:replace="index::footer"></th:block>
+    <th:block th:replace="index::bootstrapScript"></th:block>
+  </body>
+</html>
